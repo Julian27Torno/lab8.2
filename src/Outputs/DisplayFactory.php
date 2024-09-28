@@ -10,13 +10,18 @@ class DisplayFactory
 {
     public static function getInstance($format = 'text')
     {
-        if ($format == 'text') {
-            return new TextFormat();
-        } elseif ($format == 'html') {
-            return new HTMLFormat();
-        } elseif ($format == 'pdf') {
-            return new PDFFormat();
+        switch ($format) {
+            case 'text':
+                return new TextFormat();
+            case 'html':
+                return new HTMLFormat();
+            case 'pdf':
+                return new PDFFormat();
+            default:
+                // Optionally handle an unknown format here
+                throw new Exception("Unsupported format: " . $format);
         }
+        
         
         // else
         return null;

@@ -38,6 +38,30 @@ class PDFFormat implements ProfileFormatter
         $this->pdf->Cell(0, 10, 'Experience:', 0, 1);
         foreach ($profile->getExperience() as $job) {
             $this->pdf->Cell(0, 10, '- ' . $job['job_title'] . ' at ' . $job['company'] . ' (' . $job['start_date'] . ' to ' . $job['end_date'] . ')', 0, 1);
+            $this->pdf->MultiCell(0, 10, 'Description: ' . $job['description'], 0, 1);
+        }
+        //certificate
+        $this->pdf->Cell(0, 10, 'Certifications:', 0, 1);
+        foreach ($profile->getCertifications() as $cert) {
+            $this->pdf->Cell(0, 10, '- ' . $cert['name'] ." (". $cert['date_earned']. ')', 0, 1);
+        }
+        //extra curricular acts
+        $this->pdf->Cell(0, 10, 'Extra Curricular Activities:', 0, 1);
+        foreach ($profile->getExtracurricularActivities() as $acts) {
+            $this->pdf->Cell(0, 10, '- ' . $acts['role'] . " at " . $acts['organization'] . " (" . $acts['start_date'] . " to " . $acts['end_date'] . ")", 0, 1);
+            $this->pdf->MultiCell(0, 10, 'Description: ' . $acts['description'], 0, 1);
+        }
+        //languages
+        $this->pdf->Cell(0, 10, 'Languages:', 0, 1);
+        foreach ($profile->getLanguages() as $lang) {
+            $this->pdf->Cell(0, 10, '- ' . $lang['language'] ." (". $lang['proficiency']. ')', 0, 1);
+        }
+        //references
+        $this->pdf->Cell(0, 10, 'References:', 0, 1);
+        foreach ($profile->getReferences() as $refs) {
+            $this->pdf->Cell(0, 10, '- ' . $refs['name'] . ', ' . $refs['position'] . ' at ' . $refs['company'], 0, 1);
+            $this->pdf->Cell(0, 10, '  Email: ' . $refs['email'], 0, 1);
+            $this->pdf->Cell(0, 10, '  Phone Number: ' . $refs['phone_number'], 0, 1);
         }
     }
 
