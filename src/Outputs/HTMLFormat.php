@@ -9,55 +9,109 @@ class HTMLFormat implements ProfileFormatter
 
     public function setData($profile)
     {
-        $output = "<h1>Profile of " . $profile->getFullName() . "</h1>";
-        $output .= "<p>Email: " . $profile->getContactDetails()['email'] . "</p>";
-        $output .= "<p>Phone: " . $profile->getContactDetails()['phone_number'] . "</p>";
+        ob_start(); // Start capturing output
 
-        $output .= "<h2>Education</h2>";
-        $output .= "<p>" . $profile->getEducation()['degree'] . " at " . $profile->getEducation()['university'] . "</p>";
+        ?>
+        <!DOCTYPE HTML>
+        <html>
+        <head>
+            <title>Profile - <?php echo $profile->getFounder(); ?></title>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+            <link rel="stylesheet" href="/assets/css/main.css" />
+        </head>
+        <body class="single is-preload">
+            <!-- Wrapper -->
+            <div id="wrapper">
+                <!-- Header -->
+                <header id="header">
+                    <h1><a href="index.php">Profile of <?php echo $profile->getFounder(); ?></a></h1>
+                    <nav class="links">
+                        <ul>
+                            <li><a href="https://www.auf.edu.ph/home/index.php">Home</a></li>
+                            <li><a href="https://www.auf.edu.ph/home/articles.php?article=10">About</a></li>
+                            <li><a href="https://www.auf.edu.ph/home/articles.php?article=128">Contact</a></li>
+                        </ul>
+                    </nav>
+                    <nav class="main">
+                        <ul>
+                            <li class="search">
+                                <a class="fa-search" href="#search">Search</a>
+                                <form id="search" method="get" action="#">
+                                    <input type="text" name="query" placeholder="Search" />
+                                </form>
+                            </li>
+                            <li class="menu">
+                                <a class="fa-bars" href="#menu">Menu</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </header>
 
-        $output .= "<h2>Skills</h2>";
-        $output .= "<p>" . implode(", ", $profile->getSkills()) . "</p>";
+                <!-- Main -->
+                <div id="main">
+                    <!-- Post -->
+                    <article class="post">
+                        <header>
+                            <div class="title">
+                                <h1>The Founder</h1>
+                                <h2><?php echo $profile->getFounder(); ?></h2>
+                                <p>A Biography</p>
+                            </div>
+                            <div class="meta">
+    <time class="published" datetime="2024-09-28">2024-09-28</time>
+    <a href="https://www.auf.edu.ph/home/index.php" class="author">
+        <span class="name">AUF</span>
+        <img src="https://auf.edu.ph/images/auf-logo.png" alt="AUF Logo" style="width: 50px; height: auto; border-radius: 50%;" />
+    </a>
+</div>
 
-        $output .= "<h2>Experience</h2><ul>";
-        foreach ($profile->getExperience() as $job) {
-            $output .= "<li><strong>" . $job['job_title'] . " at " . $job['company'] . " (" . $job['start_date'] . " to " . $job['end_date'] . ")</strong></li>";
-            $output .= "<p style='margin-top: 10px; margin-bottom: 10px;'>Description: " . $job['description'] . "</p>";
-        }
-        $output .= "</ul>";
+                        </header>
+                        <?php if ($profile->getImage()) { ?>
+                            <span class="image featured"><img src="<?php echo $profile->getImage(); ?>" alt="Founder Image" /></span>
+                        <?php } ?>
+                        <?php
+                        foreach ($profile->getSections() as $section) {
+                            echo "<h3>" . $section['title'] . "</h3>";
+                            foreach ($section['paragraphs'] as $paragraph) {
+                                echo "<p>" . $paragraph . "</p>";
+                            }
+                        }
+                        ?>
+                        <footer>
+                            <ul class="stats">
+                                <li><a href="#">General</a></li>
+                                <li><a href="#" class="icon solid fa-heart">28</a></li>
+                                <li><a href="#" class="icon solid fa-comment">128</a></li>
+                            </ul>
+                        </footer>
+                    </article>
+                </div>
 
-        // Certifications
-        $output .= "<h2>Certifications</h2><ul>";
-        foreach ($profile->getCertifications() as $cert) {
-            $output .= "<li>" . $cert['name'] . " (" . $cert['date_earned'] . ")</li>";
-        }
-        $output .= "</ul>";
+                <!-- Footer -->
+                <section id="footer">
+                    <ul class="icons">
+                        <li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+                        <li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+                        <li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+                        <li><a href="#" class="icon solid fa-rss"><span class="label">RSS</span></a></li>
+                        <li><a href="#" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+                    </ul>
+                    <p class="copyright">&copy; AUF. Design: <a href="http://html5up.net">HTML5 UP</a>. Images: <a href="http://unsplash.com">Unsplash</a>.</p>
+                </section>
+            </div>
 
-        // Extra Curricular Activities
-        $output .= "<h2>Extra Curricular Activities</h2><ul>";
-        foreach ($profile->getExtracurricularActivities() as $acts) {
-            $output .= "<li><strong>" . $acts['role'] . " at " . $acts['organization'] . " (" . $acts['start_date'] . " to " . $acts['end_date'] . ")</strong></li>";
-            $output .= "<p style='margin-top: 10px; margin-bottom: 10px;'>Description: " . $acts['description'] . "</p>";
-        }
-        $output .= "</ul>";
+            <!-- Scripts -->
+            <script src="/assets/js/jquery.min.js"></script>
+            <script src="/assets/js/browser.min.js"></script>
+            <script src="/assets/js/breakpoints.min.js"></script>
+            <script src="/assets/js/util.js"></script>
+            <script src="/assets/js/main.js"></script>
+        </body>
+        </html>
+        <?php
 
-        // Languages
-        $output .= "<h2>Languages</h2><ul>";
-        foreach ($profile->getLanguages() as $language) {
-            $output .= "<li>" . $language['language'] . " (" . $language['proficiency'] . ")</li>";
-        }
-        $output .= "</ul>";
-
-        // References
-        $output .= "<h2>References</h2><ul>";
-        foreach ($profile->getReferences() as $reference) {
-            $output .= "<li><strong>" . $reference['name'] . ", " . $reference['position'] . " at " . $reference['company'] . "</strong></li>";
-            $output .= "<p>Email: " . $reference['email'] . "</p>";
-            $output .= "<p>Phone: " . $reference['phone_number'] . "</p>";
-        }
-        $output .= "</ul>";
-
-        $this->response = $output;
+        $this->response = ob_get_clean(); // Get the captured output
     }
 
     public function render()

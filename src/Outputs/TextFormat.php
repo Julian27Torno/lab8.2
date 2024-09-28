@@ -9,50 +9,16 @@ class TextFormat implements ProfileFormatter
 
     public function setData($profile)
     {
-        // Personal Information
-        $output = "Full Name: " . $profile->getFullName() . PHP_EOL;
-        $output .= "Email: " . $profile->getContactDetails()['email'] . PHP_EOL;
-        $output .= "Phone: " . $profile->getContactDetails()['phone_number'] . PHP_EOL;
-        $output .= "Address: " . implode(", ", $profile->getContactDetails()['address']) . PHP_EOL;
+       
+        $output = "Founder: " . $profile->getFounder() . PHP_EOL . PHP_EOL;
 
-        // Education
-        $output .= "Education: " . $profile->getEducation()['degree'] . " at " . $profile->getEducation()['university'] . PHP_EOL;
-
-        // Skills
-        $output .= "Skills: " . implode(", ", $profile->getSkills()) . PHP_EOL;
-
-        // Experience
-        $output .= PHP_EOL . "Experience:" . PHP_EOL;
-        foreach ($profile->getExperience() as $job) {
-            $output .= "- " . $job['job_title'] . " at " . $job['company'] . " (" . $job['start_date'] . " to " . $job['end_date'] . ")" . PHP_EOL;
-            $output .= "  Description: " . $job['description'] . PHP_EOL;
-        }
-
-        // Certifications
-        $output .= PHP_EOL . "Certifications:" . PHP_EOL;
-        foreach ($profile->getCertifications() as $cert) {
-            $output .= "- " . $cert['name'] . " (" . $cert['date_earned'] . ")" . PHP_EOL;
-        }
-
-        // Extra Curricular Activities
-        $output .= PHP_EOL . "Extra Curricular Activities:" . PHP_EOL;
-        foreach ($profile->getExtracurricularActivities() as $activity) {
-            $output .= "- " . $activity['role'] . " at " . $activity['organization'] . " (" . $activity['start_date'] . " to " . $activity['end_date'] . ")" . PHP_EOL;
-            $output .= "  Description: " . $activity['description'] . PHP_EOL;
-        }
-
-        // Languages
-        $output .= PHP_EOL . "Languages:" . PHP_EOL;
-        foreach ($profile->getLanguages() as $language) {
-            $output .= "- " . $language['language'] . " (" . $language['proficiency'] . ")" . PHP_EOL;
-        }
-
-        // References
-        $output .= PHP_EOL . "References:" . PHP_EOL;
-        foreach ($profile->getReferences() as $reference) {
-            $output .= "- " . $reference['name'] . ", " . $reference['position'] . " at " . $reference['company'] . PHP_EOL;
-            $output .= "  Email: " . $reference['email'] . PHP_EOL;
-            $output .= "  Phone: " . $reference['phone_number'] . PHP_EOL;
+      
+        foreach ($profile->getSections() as $section) {
+            $output .= $section['title'] . PHP_EOL; 
+            $output .= str_repeat("=", strlen($section['title'])) . PHP_EOL; 
+            foreach ($section['paragraphs'] as $paragraph) {
+                $output .= $paragraph . PHP_EOL . PHP_EOL; 
+            }
         }
 
         $this->response = $output;
